@@ -9,19 +9,23 @@ import express from 'express'
 import { CONNECT_DB, GET_DB, COLOSE_DB } from '~/config/mongodb'
 import exitHook from 'async-exit-hook'
 import { env } from '~/config/environment'
+import { APIs_V1 } from '~/routes/v1'
 
 const START_SERVER = () => {
   const app = express()
+  // enable req.body json data
+  app.use(express.json())
 
-  app.get('/', async (req, res) => {
-    console.log(await GET_DB().listCollections().toArray())
+  // use APIs_V1
+  app.use('/v1', APIs_V1)
 
+  app.get('/', (req, res) => {
     res.end('<h1>Hello world111</h1>')
   })
 
   app.listen(env.APP_PORT, env.APP_HOST, () => {
     // eslint-disable-next-line no-console
-    console.log(`Hello ${env.AUTHOR}, I am running at http://${env.APP_HOST}:${env.APP_PORT}/`)
+    console.log(`3. Hello ${env.AUTHOR}, I am running at http://${env.APP_HOST}:${env.APP_PORT}/`)
   })
 
   exitHook(() => {
@@ -32,9 +36,9 @@ const START_SERVER = () => {
 }
 
 // chi khi ket noi den database thanh cong moi start server backend
-console.log('connecting...')
+console.log('1. Connecting...')
 CONNECT_DB()
-  .then(() => console.log('connected to Mdb cluod success'))
+  .then(() => console.log('2. Connected!'))
   .then(() => START_SERVER())
   .catch(error => {
     console.error(error)
