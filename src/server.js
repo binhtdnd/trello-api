@@ -8,13 +8,10 @@
 import express from 'express'
 import { CONNECT_DB, GET_DB, COLOSE_DB } from '~/config/mongodb'
 import exitHook from 'async-exit-hook'
-
+import { env } from '~/config/environment'
 
 const START_SERVER = () => {
   const app = express()
-
-  const hostname = 'localhost'
-  const port = 8017
 
   app.get('/', async (req, res) => {
     console.log(await GET_DB().listCollections().toArray())
@@ -22,9 +19,9 @@ const START_SERVER = () => {
     res.end('<h1>Hello world111</h1>')
   })
 
-  app.listen(port, hostname, () => {
+  app.listen(env.APP_PORT, env.APP_HOST, () => {
     // eslint-disable-next-line no-console
-    console.log(`Hello Binh, I am running at http://${hostname}:${port}/`)
+    console.log(`Hello ${env.AUTHOR}, I am running at http://${env.APP_HOST}:${env.APP_PORT}/`)
   })
 
   exitHook(() => {
