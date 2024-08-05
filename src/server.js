@@ -6,7 +6,9 @@
  */
 
 import express from 'express'
-import { CONNECT_DB, GET_DB } from '~/config/mongodb'
+import { CONNECT_DB, GET_DB, COLOSE_DB } from '~/config/mongodb'
+import exitHook from 'async-exit-hook'
+
 
 const START_SERVER = () => {
   const app = express()
@@ -17,12 +19,18 @@ const START_SERVER = () => {
   app.get('/', async (req, res) => {
     console.log(await GET_DB().listCollections().toArray())
 
-    res.end('<h1>Hello world</h1>')
+    res.end('<h1>Hello world111</h1>')
   })
 
   app.listen(port, hostname, () => {
     // eslint-disable-next-line no-console
-    console.log(`Hello Binh, I am running at ${hostname}:${port}/`)
+    console.log(`Hello Binh, I am running at http://${hostname}:${port}/`)
+  })
+
+  exitHook(() => {
+    console.log('4. Disconnecting')
+    COLOSE_DB()
+    console.log('5. Closed DB')
   })
 }
 

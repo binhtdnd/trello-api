@@ -3,9 +3,9 @@
  * YouTube: https://youtube.com/@trungquandev
  * "A bit of fragrance clings to the hand that gives flowers!"
  */
-// 
+// QiCzETwIlYjsQCa3
 
-const MONGODB_URI = 'mongodb+srv://binhtdnd:@cluster0-trello.aikvlar.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0-Trello'
+const MONGODB_URI = 'mongodb+srv://binhtdnd:QiCzETwIlYjsQCa3@cluster0-trello.aikvlar.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0-Trello'
 const DATABASE_NAME = 'data-trello'
 
 import { MongoClient, ServerApiVersion } from 'mongodb'
@@ -28,6 +28,15 @@ export const CONNECT_DB = async () => {
   trelloDatabaseInstance = mongoClientInstance.db(DATABASE_NAME)
 }
 
+//
+//
+//
+//
+
+export const COLOSE_DB = async () => {
+  console.log('on clodseDB from mongodb.js')
+  await mongoClientInstance.close()
+}
 //tận dụng lại biến trelloDatabaseInstance, gọi lại ở nơi khác để sử dụng nếu cần
 //neu chua ket noi thi hay ket noi
 export const GET_DB = () => {
