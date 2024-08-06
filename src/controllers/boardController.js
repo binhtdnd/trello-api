@@ -19,12 +19,7 @@ const createNew = async (req, res, next) => {
     throw new ApiError(StatusCodes.BAD_GATEWAY, 'binhtd test error')
 
     // res.status(StatusCodes.CREATED).json({ message: 'POST: API get create new board. Run from Controller' })
-  } catch (error) {
-    next(error)
-    // res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-    //   errors: error.message
-    // })
-  }
+  } catch (error) {next(error)}
 }
 
 export const boardController = {
