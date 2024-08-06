@@ -10,6 +10,7 @@ import { CONNECT_DB, GET_DB, COLOSE_DB } from '~/config/mongodb'
 import exitHook from 'async-exit-hook'
 import { env } from '~/config/environment'
 import { APIs_V1 } from '~/routes/v1'
+import { errorHandlingMiddleware } from './middlewares/errorHandlingMiddleware'
 
 const START_SERVER = () => {
   const app = express()
@@ -19,9 +20,9 @@ const START_SERVER = () => {
   // use APIs_V1
   app.use('/v1', APIs_V1)
 
-  app.get('/', (req, res) => {
-    res.end('<h1>Hello world111</h1>')
-  })
+
+  // middleware xu ly loi tap trung
+  app.use(errorHandlingMiddleware)
 
   app.listen(env.APP_PORT, env.APP_HOST, () => {
     // eslint-disable-next-line no-console
