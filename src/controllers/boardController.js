@@ -4,7 +4,8 @@
 //
 //
 import { StatusCodes } from 'http-status-codes'
-import ApiError from '~/utils/ApiError'
+import { boardService } from '~/services/boardService'
+
 
 const createNew = async (req, res, next) => {
   try {
@@ -15,11 +16,11 @@ const createNew = async (req, res, next) => {
     //
     //
     //
-    //
-    throw new ApiError(StatusCodes.BAD_GATEWAY, 'binhtd test error')
+    const createdBoard = await boardService.createNew(req.body)
 
-    // res.status(StatusCodes.CREATED).json({ message: 'POST: API get create new board. Run from Controller' })
-  } catch (error) {next(error)}
+
+    res.status(StatusCodes.CREATED).json({ createdBoard })
+  } catch (error) { next(error) }
 }
 
 export const boardController = {
