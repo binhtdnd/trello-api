@@ -48,11 +48,7 @@ const findOneById = async (id) => {
 const getDetails = async (id) => {
   try {
     // console.log('test: ', id)
-    const result = await GET_DB().collection(BOARD_COLLECTION_NAME).findOne({
-      // _id: ObjectId.createFromHexString(id)
-      _id: new ObjectId(id)
-
-    })
+    const result = await GET_DB().collection(BOARD_COLLECTION_NAME).findOne({ _id: new ObjectId(id) })
     return result
   } catch (erorr) { throw new Error(erorr) }
 }
