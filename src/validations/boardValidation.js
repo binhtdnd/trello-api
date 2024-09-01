@@ -1,6 +1,7 @@
 import Joi from 'joi'
 import { StatusCodes } from 'http-status-codes'
 import ApiError from '~/utils/ApiError'
+import { BOARD_TYPES } from '~/utils/constants'
 
 const createNew = async (req, res, next) => {
 
@@ -18,7 +19,8 @@ const createNew = async (req, res, next) => {
       'string.min': 'description min 3 chars',
       'string.max': 'description max 50 chars',
       'string.trim': 'description must not have leading or trailing whitespace'
-    })
+    }),
+    type: Joi.string().valid(BOARD_TYPES.PUBLIC, BOARD_TYPES.PRIVATE).required()
 
   })
   try {
@@ -27,7 +29,7 @@ const createNew = async (req, res, next) => {
     next()
 
   } catch (error) {
-    const errorMessege= new Error(error).message
+    const errorMessege = new Error(error).message
     const customError = new ApiError(StatusCodes.UNPROCESSABLE_ENTITY, errorMessege)
     next(customError)
   }
