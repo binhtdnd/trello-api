@@ -4,7 +4,7 @@
  * "A bit of fragrance clings to the hand that gives flowers!"
  */
 import Joi from 'joi'
-import { ObjectId } from 'mongodb'
+import { ObjectId, ReturnDocument } from 'mongodb'
 import { OBJECT_ID_RULE, OBJECT_ID_RULE_MESSAGE } from '~/utils/validators'
 import { GET_DB } from '~/config/mongodb'
 import { BOARD_TYPES } from '~/utils/constants'
@@ -48,6 +48,7 @@ const findOneById = async (id) => {
 }
 
 const getDetails = async (id) => {
+  // console.log('func get Detail')
   try {
     // console.log('test: ', id)
     // const result = await GET_DB().collection(BOARD_COLLECTION_NAME).findOne({ _id: new ObjectId(id) })
@@ -75,9 +76,21 @@ const getDetails = async (id) => {
         }
       }
     ]).toArray()
-
     return result[0] || null
   } catch (erorr) { throw new Error(erorr) }
+}
+
+const pushColumnOrderIds = async (column) => {
+  try {
+    const result = await GET_DB().collection(BOARD_COLLECTION_NAME).findOneAndUpdate(
+      { _id: new ObjectId(column.boardId), },
+      { $push: { columnOrderIds: new ObjectId(column._id) } },
+      { ReturnDocument: 'after' }
+    )
+    return result.value
+  } catch (error) {
+    throw new Error(error)
+  }
 }
 
 export const boardModel = {
@@ -85,5 +98,6 @@ export const boardModel = {
   BOARD_COLLECTION_SCHEMA,
   createNew,
   findOneById,
-  getDetails
+  getDetails,
+  pushColumnOrderIds
 }
