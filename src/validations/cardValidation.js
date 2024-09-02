@@ -19,8 +19,6 @@ const createNew = async (req, res, next) => {
     const customError = new ApiError(StatusCodes.UNPROCESSABLE_ENTITY, errorMessege)
     next(customError)
   }
-
-
 }
 
 export const cardValidation = {

@@ -12,5 +12,4 @@ const Router = express.Router()
 Router.route('/')
   .post(columnValidation.createNew, columnController.createNew)
 
-
 export const columnRoute = Router

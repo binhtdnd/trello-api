@@ -19,7 +19,6 @@ const createNew = async (req, res, next) => {
     next(customError)
   }
 
-
 }
 
 export const columnValidation = {
