@@ -7,7 +7,8 @@
 
 import Joi from 'joi'
 import { OBJECT_ID_RULE, OBJECT_ID_RULE_MESSAGE } from '~/utils/validators'
-
+import GET_DB from '~/config/mongodb'
+import { ObjectId } from 'mongodb'
 // Define Collection (name & schema)
 const COLUMN_COLLECTION_NAME = 'columns'
 const COLUMN_COLLECTION_SCHEMA = Joi.object({
@@ -24,7 +25,33 @@ const COLUMN_COLLECTION_SCHEMA = Joi.object({
   _destroy: Joi.boolean().default(false)
 })
 
+const validateBeforeCreate = async (data) => {
+  return await COLUMN_COLLECTION_SCHEMA.validateAsync(data, { abortEarly: false })
+}
+
+const createNew = async (data) => {
+  try {
+    const validData = await validateBeforeCreate(data)
+    const createdBoard = await GET_DB().collection(COLUMN_COLLECTION_NAME).insertOne(validData)
+    return createdBoard
+  } catch (erorr) { throw new Error(erorr) }
+}
+
+const findOneById = async (id) => {
+  try {
+    // console.log('test: ', id)
+    const result = await GET_DB().collection(COLUMN_COLLECTION_NAME).findOne({
+      // _id: ObjectId.createFromHexString(id)
+      _id: new ObjectId(id)
+
+    })
+    return result
+  } catch (erorr) { throw new Error(erorr) }
+}
+
 export const columnModel = {
   COLUMN_COLLECTION_NAME,
-  COLUMN_COLLECTION_SCHEMA
+  COLUMN_COLLECTION_SCHEMA,
+  createNew,
+  findOneById
 }
