@@ -38,6 +38,32 @@ const createNew = async (req, res, next) => {
 
 }
 
+const update = async (req, res, next) => {
+
+  const correctCondition = Joi.object({
+    title: Joi.string().min(3).max(50).trim().strict(),
+    description: Joi.string().min(3).max(256).trim().strict(),
+    type: Joi.string().valid(BOARD_TYPES.PUBLIC, BOARD_TYPES.PRIVATE)
+
+  })
+  try {
+    //abortEarly: false de? truong hop co nhieu loi validation thi tra ve tat ca cac loi, ko thi chi tra 1 loi dau tien
+    //doi voi turong hop update cho phep allowUnknown: true de cho phep day len 1 truong` chua dinhj nghia (unknown)
+    await correctCondition.validateAsync(req.body, {
+      abortEarly: false,
+      allowUnknown: true,
+    })
+    next()
+
+  } catch (error) {
+    const errorMessege = new Error(error).message
+    const customError = new ApiError(StatusCodes.UNPROCESSABLE_ENTITY, errorMessege)
+    next(customError)
+  }
+
+
+}
+
 export const boardValidation = {
-  createNew
+  createNew, update
 }
