@@ -10,7 +10,9 @@ import { boardModel } from '~/models/boardModel'
 import ApiError from '~/utils/ApiError'
 import { StatusCodes } from 'http-status-codes'
 import { cloneDeep } from 'lodash'
-
+import { columnModel } from '~/models/columnModel'
+import { cardModel } from '~/models/cardModel'
+import { ObjectId } from 'mongodb'
 const createNew = async (reqBody) => {
   try {
     const newBoard = {
@@ -58,8 +60,34 @@ const update = async (boardId, reqBody) => {
   } catch (error) { throw error }
 }
 
+const moveCardToDifferentColumnAPI = async (reqBody) => {
+  try {
+
+    // b1: cap nhat lai column old
+    await columnModel.update(reqBody.prevColumnId, {
+      cardOrderIds: reqBody.prevCardOrderIds,
+      updatedAt: Date.now()
+    })
+
+    // b2: cap nhat lai column new
+    await columnModel.update(reqBody.nextColumnId, {
+      cardOrderIds: reqBody.nextCardOrderIds,
+      updatedAt: Date.now()
+    })
+    // b3: cap nhat lai columnIDS cua column new
+    await cardModel.update(reqBody.currentCardId, {
+      columnId: reqBody.nextColumnId
+    })
+    // console.log('temp: ', temp)
+
+
+    return { updatedResult: 'Success' }
+  } catch (error) { throw error }
+}
+
 export const boardService = {
   createNew,
   getDetails,
-  update
+  update,
+  moveCardToDifferentColumnAPI
 }

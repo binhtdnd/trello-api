@@ -22,4 +22,7 @@ Router.route('/:id')
   .get(boardController.getDetails)
   .put(boardValidation.update, boardController.update)
 
+//api support di chuyen card giua cac cot khacs nhau
+Router.route('/supports/moving_card')
+  .put(boardValidation.moveCardToTheDifferentColumn, boardController.moveCardToDifferentColumn)
 export const boardRoute = Router
