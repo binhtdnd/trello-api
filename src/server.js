@@ -29,10 +29,21 @@ const START_SERVER = () => {
   // middleware xu ly loi tap trung
   app.use(errorHandlingMiddleware)
 
-  app.listen(env.APP_PORT, env.APP_HOST, () => {
-    // eslint-disable-next-line no-console
-    console.log(`3. Hello ${env.AUTHOR}, I am running at http://${env.APP_HOST}:${env.APP_PORT}/`)
-  })
+
+  if (env.BUILD_MODE === 'production') {
+    //moi truong production onrender
+    app.listen(process.env.PORT, () => {
+      // eslint-disable-next-line no-console
+      console.log(`3. PRODUCT Hello ${env.AUTHOR}, BE running at PORT: ${process.env.PORT}`)
+    })
+  } else {
+    // moi truong dev
+    app.listen(env.LOCAL_DEV_APP_PORT, env.LOCAL_DEV_APP_HOST, () => {
+      // eslint-disable-next-line no-console
+      console.log(`3. Local Dev Hello ${env.AUTHOR}, I am running at http://${env.LOCAL_DEV_APP_HOST}:${env.LOCAL_DEV_APP_PORT}/`)
+    })
+  }
+
 
   exitHook(() => {
     console.log('4. Disconnecting')
